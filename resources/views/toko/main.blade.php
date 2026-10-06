@@ -1,0 +1,69 @@
+<x-templates>
+    <x-slot:title>{{ $title }}</x-slot:title>
+
+    <div class="mb-4">
+          <h3 class="page-title mb-1">Laporan Pembangunan Gedung Sekolah</h3>
+
+          <p class="text-muted mb-0">
+            Monitoring perkembangan pembangunan secara berkala.
+          </p>
+        </div>
+
+        <!-- TABLE -->
+        <div class="dashboard-card card mt-4">
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <span> {{ $title }} </span>
+
+            <a href="/toko/create" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-lg me-1"></i>
+              Tambah Toko
+            </a>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-stripped" id="dataTable">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Nama Toko</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                    @php $no = 1; @endphp
+                    @foreach ($rows as $row)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $row->nama_toko }}</td>
+                            <td>
+                                <span class="badge rounded-pill {{ ($row->aktif == 'Y' ? 'bg-primary' : 'bg-danger') }}">{{ ($row->aktif == 'Y' ? 'Aktif' : 'Non Aktif') }}</span>
+                            </td>
+                            <td>
+                                <form action="/toko/{{ $row->id }}" method="POST">
+                                    @csrf
+                                    @method('delete')
+
+                                    <a href="/toko/{{ $row->id }}/edit" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="submit" class="btn btn-sm btn-danger hapus">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+</x-templates>
