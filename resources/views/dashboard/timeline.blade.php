@@ -5,7 +5,7 @@
         <div class="card-body">
         <div class="timeline">
 
-            @foreach ($laporan->sortByDesc('tanggal')->take(5) as $item)
+            @foreach ($laporan->sortByDesc('id')->sortByDesc('tanggal')->take(5) as $item)
                 <div class="timeline-item">
                     <div class="timeline-dot {{ $item->mutasi == 'masuk' ? 'done' : 'warning' }}"></div>
 
