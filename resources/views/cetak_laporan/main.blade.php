@@ -130,6 +130,20 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="dashboard-card card">
+                    <div class="text-center p-2">
+                        <span class="bi bi-cart-check text-secondary" style="font-size: 80px;"></span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Review Nota Belanja</h5>
+                        <p class="card-text">Kumpulan catatan nota belanja bahan material bangunan Revitalisasi 2026.</p>
+                        <a href="/cetak_laporan/nota_belanja" class="btn btn-sm btn-secondary">
+                            <span class="bi bi-eye"></span> View Nota
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
 </x-templates>

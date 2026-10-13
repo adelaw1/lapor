@@ -202,7 +202,18 @@
                             <td style="text-align: center;">{{ $no }}</td>
                             <td style="text-align: center;">{{ $format->parse($item->tanggal)->isoFormat('D MMMM Y') }}</td>
                             <td style="text-align: center;">{{ $master->getNoBukti($item->mutasi, $item->metode_pembayaran) . $no_bukti }}</td>
-                            <td>{{ $item->uraian }}</td>
+                            <td>
+                                {{ $item->uraian }}
+                                @if ($item->status)
+                                    @if ($item->status == 'panitia')
+                                        @php $jml = $master->getDataPanitia()->count(); @endphp
+                                        ({{ $jml }} org)
+                                    @else
+                                        @php $jml = $master->getDataPekerja()->count(); @endphp
+                                        ({{ $jml }} org)
+                                    @endif
+                                @endif
+                            </td>
                             <td style="text-align: right;">{{ $item->mutasi == 'masuk' ? number_format($item->nominal, 0, ',', '.') : '' }}</td>
                             <td style="text-align: right;">{{ $item->mutasi == 'keluar' ? number_format($item->nominal, 0, ',', '.') : '' }}</td>
                             <td style="text-align: right;">{{ number_format($saldo, 0, ',', '.') }}</td>

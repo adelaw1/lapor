@@ -94,11 +94,21 @@ class MasterDataController extends Controller
         return $data;
     }
 
+    public function getDataAllBelanjaMaterial()
+    {
+        $data = InputLaporan::with(['toko', 'barang'])
+                        ->where('kategori', 'belanja_material')
+                        ->orderBy('tanggal', 'desc')
+                        ->orderBy('id', 'desc')
+                        ->get();
+        return $data;
+    }
+
     public function getDataLaporanGroupBulan()
     {
         $data = InputLaporan::select(
                     DB::raw("DATE_FORMAT(tanggal, '%Y-%m') as bulan_tahun"),
-                    DB::raw("tanggal, kode, kategori, uraian, mutasi, metode_pembayaran, nominal, bukti")
+                    DB::raw("tanggal, kode, kategori, uraian, mutasi, status, metode_pembayaran, nominal, bukti")
                 )
                 ->orderBy('bulan_tahun')
                 ->with(['rentang_tanggal', 'barang'])

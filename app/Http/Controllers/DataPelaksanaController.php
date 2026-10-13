@@ -59,8 +59,8 @@ class DataPelaksanaController extends Controller
         }
 
         DataPelaksana::create($validasi);
-        $this->_updateInputLaporan($request->jabatan);
-        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Ditambah', 'Tambah Data Pelaksana'));
+        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Ditambah', 'Tambah Data Pelaksana'))
+                                        ->with('update_laporan', $request->jabatan);
     }
 
     /**
@@ -109,8 +109,8 @@ class DataPelaksanaController extends Controller
         }
 
         $dataPelaksana->update($validasi);
-        $this->_updateInputLaporan($request->jabatan);
-        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Diedit', 'Edit Data Pelaksana'));
+        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Diedit', 'Edit Data Pelaksana'))
+                                    ->with('update_laporan', $request->jabatan);
     }
 
     /**
@@ -121,10 +121,10 @@ class DataPelaksanaController extends Controller
         if ($dataPelaksana->ttd) {
             Storage::delete($dataPelaksana->ttd);
         }
-        $id = $dataPelaksana->id;
+        $id = $dataPelaksana->honor_id;
         $dataPelaksana->destroy($dataPelaksana->id);
-        $this->_updateInputLaporan($id);
-        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Dihapus', 'Hapus Data Pelaksana'));
+        return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Dihapus', 'Hapus Data Pelaksana'))
+                                        ->with('update_laporan', $id);
     }
 
     private function getDataHonor()
@@ -138,9 +138,9 @@ class DataPelaksanaController extends Controller
         return $return;
     }
 
-    private function _updateInputLaporan($id): void
+    public function updateInputLaporan(Request $request): void
     {
-        $honor = Honor::findOrFail($id);
+        $honor = Honor::findOrFail($request->id);
         $statusTarget = $honor->kategori;
         if ($statusTarget == 'panitia') {
             $nominal = $this->master->getDataPanitia()->sum('honor.nominal');
@@ -164,9 +164,9 @@ class DataPelaksanaController extends Controller
                     'id' => $dt->id,
                     'nominal' => ($jmlHari * $nominal),
                 ]);
-            }
 
-            // dd($update);
+            }
+                
             foreach ($update as $up) {
                 InputLaporan::where('id', $up['id'])->update(['nominal' => $up['nominal']]);
             }

@@ -107,6 +107,15 @@
                             </td>
                             <td>
                               {{ $row->uraian }}
+                              @if ($row->status)
+                                  @if ($row->status == 'panitia')
+                                      @php $jml = $master->getDataPanitia()->count(); @endphp
+                                      ({{ $jml }} org)
+                                  @else
+                                      @php $jml = $master->getDataPekerja()->count(); @endphp
+                                      ({{ $jml }} org)
+                                  @endif
+                              @endif
                               @if ($row->toko)
                                   <br><small class="badge rounded-pill bg-secondary">Toko {{ $row->toko->nama_toko }}</small>
                               @endif

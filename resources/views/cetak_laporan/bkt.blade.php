@@ -160,11 +160,19 @@
                             </tr>
                         @endforeach
                     @else
+                        @php $jml = 0; @endphp
+                        @if ($item->status)
+                            @if ($item->status == 'panitia')
+                                @php $jml = $master->getDataPanitia()->count(); @endphp
+                            @else
+                                @php $jml = $master->getDataPekerja()->count(); @endphp
+                            @endif
+                        @endif
                         <tr>
                             <td style="text-align: center;">{{ $no }}</td>
                             <td style="text-align: center;">{{ $format->parse($item->tanggal)->isoFormat('D MMMM Y') }}</td>
                             <td style="text-align: center;">{{ $master->getNoBukti($item->mutasi, $item->metode_pembayaran) . $no_bukti }}</td>
-                            <td>{{ $item->mutasi == 'tarik' ? 'Masuk Kas Tunai' : $item->uraian }}</td>
+                            <td>{{ ($item->mutasi == 'tarik' ? 'Masuk Kas Tunai' : ($item->uraian . ($jml ? " ({$jml} org)" : ""))) }}</td>
                             <td style="text-align: right;">{{ ($item->mutasi == 'masuk' or $item->mutasi == 'tarik') ? number_format($item->nominal, 0, ',', '.') : '' }}</td>
                             <td style="text-align: right;">{{ ($item->mutasi == 'keluar') ? number_format($item->nominal, 0, ',', '.') : '' }}</td>
                             <td style="text-align: right;">{{ number_format($saldo, 0, ',', '.') }}</td>

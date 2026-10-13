@@ -28,7 +28,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 Route::resource('/satuan', SatuanController::class)->except('show')->middleware('auth');
 Route::resource('/toko', TokoController::class)->except('show')->middleware('auth');
 Route::resource('/honor', HonorController::class)->except('show')->middleware('auth');
+Route::get('/honor/update_input_laporan/{id}', [HonorController::class, 'updateInputLaporan'])->middleware('auth');
 Route::resource('/data_pelaksana', DataPelaksanaController::class)->except('show')->middleware('auth');
+Route::get('/data_pelaksana/update_input_laporan/{id}', [DataPelaksanaController::class, 'updateInputLaporan'])->middleware('auth');
 
 Route::prefix('/input_laporan')->group(function () {
     Route::controller(InputLaporanController::class)->group(function () {
@@ -78,6 +80,7 @@ Route::controller(CetakLaporanController::class)->group(function () {
         Route::get('/bkt', 'cetak_bkt')->middleware('auth');
         Route::get('/daftar_hadir/{status}', 'cetak_daftar_hadir')->middleware('auth');
         Route::get('/honorarium/{status}', 'cetak_honorarium')->middleware('auth');
+        Route::get('/nota_belanja', 'nota_belanja')->middleware('auth');
     });
 });
 

@@ -76,4 +76,22 @@
           </div>
         </div>
 
+        <div id="update-laporan" data-id="{{ session()->has('update_laporan') ? session('update_laporan') : '' }}"></div>
+
+        @push('scripts')
+            <script>
+              $(document).ready(function () {
+                const updateLaporan = $('#update-laporan');
+                const id = updateLaporan.data('id');
+                if (id) {
+                  $.ajax({
+                    url: "/data_pelaksana/update_input_laporan/" + id,
+                    success: function (result) {
+                    }
+                  });
+                }
+              });
+            </script>
+        @endpush
+
 </x-templates>

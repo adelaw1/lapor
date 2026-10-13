@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Honor;
+use App\Models\InputLaporan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HonorController extends Controller
@@ -48,7 +50,8 @@ class HonorController extends Controller
         $validasi['nominal'] = str_replace('.', '', $request->nominal);
 
         Honor::create($validasi);
-        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Ditambah', 'Tambah Honorarium'));
+        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Ditambah', 'Tambah Honorarium'))
+                                ->with('update_laporan', $request->kategori);
     }
 
     /**
@@ -88,7 +91,8 @@ class HonorController extends Controller
         $validasi['nominal'] = str_replace('.', '', $request->nominal);
 
         $honor->update($validasi);
-        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Diedit', 'Edit Honorarium'));
+        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Diedit', 'Edit Honorarium'))
+                                    ->with('update_laporan', $request->kategori);
     }
 
     /**
@@ -96,7 +100,42 @@ class HonorController extends Controller
      */
     public function destroy(Honor $honor)
     {
+        $kategori = $honor->kategori;
         $honor->destroy($honor->id);
-        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Dihapus', 'Hapus Honorarium'));
+        return redirect('/honor')->with($this->alert->success('Honorarium <b>Berhasil</b> Dihapus', 'Hapus Honorarium'))
+                                ->with('update_laporan', $kategori);
+    }
+
+    public function updateInputLaporan(Request $request): void
+    {
+        if ($request->kategori == 'panitia') {
+            $nominal = $this->master->getDataPanitia()->sum('honor.nominal');
+            InputLaporan::where('kategori', '=', 'honor_panitia_petukang')
+                    ->where('status', '=', 'panitia')
+                    ->update(['nominal' => $nominal]);
+        } else {
+            $data = $this->master->getInputLaporan()
+            ->filter(function ($item) {
+                return $item->kategori === 'honor_panitia_petukang' && $item->status === 'pekerja';
+            });
+            $update = [];
+            foreach ($data as $dt){
+                $mulai = $dt->rentang_tanggal->tanggal_mulai;
+                $selesai = $dt->rentang_tanggal->tanggal_selesai;
+                $mulai = Carbon::parse($mulai);
+                $selesai = Carbon::parse($selesai);
+                $jmlHari = $mulai->diffInDays($selesai) + 1;
+                $nominal = $this->master->getDataPekerja()->sum('honor.nominal');
+                array_push($update, [
+                    'id' => $dt->id,
+                    'nominal' => ($jmlHari * $nominal),
+                ]);
+
+            }
+                
+            foreach ($update as $up) {
+                InputLaporan::where('id', $up['id'])->update(['nominal' => $up['nominal']]);
+            }
+        }
     }
 }

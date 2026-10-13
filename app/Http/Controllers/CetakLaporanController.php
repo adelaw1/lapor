@@ -116,4 +116,15 @@ class CetakLaporanController extends Controller
         $pdf->setPaper($paperF4, 'landscape');
         return $pdf->stream('honorarium.pdf');
     }
+
+    public function nota_belanja()
+    {
+        $data = [
+            'title' => 'Nota Belanja',
+            'format' => new Carbon,
+            'master' => $this->master,
+        ];
+
+        return view('cetak_laporan.nota_belanja', $data);
+    }
 }
