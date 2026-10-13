@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Toko;
 use App\Models\Satuan;
 use App\Models\DataPelaksana;
 use App\Models\InputLaporan;
 use App\Models\BelanjaMaterial;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Number;
 
 class MasterDataController extends Controller
 {
@@ -21,7 +18,7 @@ class MasterDataController extends Controller
 
     public function __construct()
     {
-        $this->dataPelaksana = DataPelaksana::with(['honor'])->orderBy('id', 'asc')->get();
+        $this->dataPelaksana = DataPelaksana::with(['honor'])->orderBy('honor_id', 'asc')->orderBy('id', 'asc')->get();
         $this->dataToko = Toko::orderBy('nama_toko', 'asc')->get();
         $this->dataSatuan = Satuan::orderBy('nama_satuan', 'asc')->get();
         $this->inputLaporan = InputLaporan::get();
@@ -105,8 +102,9 @@ class MasterDataController extends Controller
                 )
                 ->orderBy('bulan_tahun')
                 ->with(['rentang_tanggal', 'barang'])
-                ->orderBy('id', 'asc')
                 ->orderBy('tanggal', 'asc')
+                ->orderBy('id', 'asc')
+                ->with(['barang', 'rentang_tanggal'])
                 ->get();
         return $data;
     }

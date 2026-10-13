@@ -57,11 +57,11 @@
                         'honor_panitia_petukang' => 'edit_honor_panitia_petukang',
                         'belanja_material' => 'edit_belanja_material'
                       ];
-                      // $bkkb = 0;
-                      // $bkkt = 0;
-                      // $bkmb = 0;
-                      // $bkmt = 0;
-                      // $no_bukti = 0;
+                      $bkkb = 0;
+                      $bkkt = 0;
+                      $bkmb = 0;
+                      $bkmt = 0;
+                      $no_bukti = 0;
                     @endphp
                     @foreach ($rows as $row)
                         {{-- @if ($row->mutasi == 'keluar')

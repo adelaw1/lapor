@@ -6,6 +6,7 @@ use App\Models\InputLaporan;
 use Illuminate\Http\Request;
 use App\Models\RentangTanggal;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class InputHonorPanitiaPetukangController extends Controller
 {
@@ -72,7 +73,7 @@ class InputHonorPanitiaPetukangController extends Controller
             'title' => 'Edit Input Laporan',
             'form' => $this->form,
             'row' => $inputLaporan,
-            'rentang' => RentangTanggal::where('no_bukti', $inputLaporan->no_bukti)->get(),
+            'rentang' => RentangTanggal::where('kode', $inputLaporan->kode)->get(),
         ];
 
         return view('input_laporan.edit_honor_panitia_petukang', $data);

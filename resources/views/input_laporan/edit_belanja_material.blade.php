@@ -92,7 +92,8 @@
                           <span class="input-group-text">
                               <i class="bi bi-cash"></i>
                           </span>
-                          <input type="text" class="form-control harga"  name="harga[]" id="harga" value="{{ old('harga') ?: number_format($brg->harga, 0, ',', '.') }}" placeholder="Harga Barang" required />
+                          {{-- <input type="text" class="form-control harga"  name="harga[]" id="harga" value="{{ old('harga') ?: number_format($brg->harga, 0, ',', '.') }}" placeholder="Harga Barang" required /> --}}
+                          <input type="text" class="form-control harga"  name="harga[]" id="harga" value="{{ old('harga') ?: number_format(($brg->harga * $brg->qty), 0, ',', '.') }}" placeholder="Harga Barang" required />
                         </div>
                         @error('harga.' . $ind)
                             <span class="badge bg-danger">{{ $message }}</span>

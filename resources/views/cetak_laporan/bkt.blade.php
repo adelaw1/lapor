@@ -153,7 +153,7 @@
                                 <td style="text-align: center;">{{ $no++ }}</td>
                                 <td style="text-align: center;">{{ $format->parse($item->tanggal)->isoFormat('D MMMM Y') }}</td>
                                 <td style="text-align: center;">{{ $master->getNoBukti($item->mutasi, $item->metode_pembayaran) . $no_bukti }}</td>
-                                <td>{{ $brg->nama_barang }}</td>
+                                <td>{{ $brg->nama_barang }} ({{ $brg->qty }} {{ $brg->satuan->nama_satuan }} &#64;{{ number_format($brg->harga, 0, ',', '.') }})</td>
                                 <td style="text-align: right;"></td>
                                 <td style="text-align: right;">{{ number_format(($brg->qty * $brg->harga), 0, ',', '.') }}</td>
                                 <td style="text-align: right;">{{ number_format($saldoRinci, 0, ',', '.') }}</td>

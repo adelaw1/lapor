@@ -15,12 +15,12 @@ class InputLaporanController extends Controller
     {
         $data = [
             'title' => 'Input Laporan',
-            'rows' => InputLaporan::orderBy('id', 'desc')
-                    ->orderBy('tanggal', 'desc')
+            'rows' => InputLaporan::orderBy('tanggal', 'desc')
+                    ->orderBy('id', 'desc')
                     ->with(['toko'])
                     ->get(),
             'frm' => new Carbon,
-            // 'master' => $this->master,
+            'master' => $this->master,
         ];
 
         return view('input_laporan.main', $data);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InputLaporan;
 use Illuminate\Http\Request;
 use App\Models\BelanjaMaterial;
+use Illuminate\Support\Facades\Storage;
 
 class InputBelanjaMaterialController extends Controller
 {
@@ -68,9 +69,11 @@ class InputBelanjaMaterialController extends Controller
                     'nama_barang' => $barang,
                     'qty' => $request->qty[$start],
                     'satuan_id' => $request->satuan[$start],
-                    'harga' => $harga,
+                    // 'harga' => $harga,
+                    'harga' => ($harga / $request->qty[$start]),
                 ]);
-                $total += ($request->qty[$start] * $harga);
+                // $total += ($request->qty[$start] * $harga);
+                $total += $harga;
                 $start++;
             }
         }
@@ -141,9 +144,11 @@ class InputBelanjaMaterialController extends Controller
                     'nama_barang' => $barang,
                     'qty' => $request->qty[$start],
                     'satuan_id' => $request->satuan[$start],
-                    'harga' => $harga,
+                    // 'harga' => $harga,
+                    'harga' => ($harga / $request->qty[$start]),
                 ]);
-                $total += ($request->qty[$start] * $harga);
+                // $total += ($request->qty[$start] * $harga);
+                $total += $harga;
                 $start++;
             }
         }

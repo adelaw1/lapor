@@ -121,7 +121,9 @@ class DataPelaksanaController extends Controller
         if ($dataPelaksana->ttd) {
             Storage::delete($dataPelaksana->ttd);
         }
+        $id = $dataPelaksana->id;
         $dataPelaksana->destroy($dataPelaksana->id);
+        $this->_updateInputLaporan($id);
         return redirect('/data_pelaksana')->with($this->alert->success('Data Pelaksana <b>Berhasil</b> Dihapus', 'Hapus Data Pelaksana'));
     }
 
@@ -136,7 +138,7 @@ class DataPelaksanaController extends Controller
         return $return;
     }
 
-    private function _updateInputLaporan($id)
+    private function _updateInputLaporan($id): void
     {
         $honor = Honor::findOrFail($id);
         $statusTarget = $honor->kategori;
@@ -145,29 +147,29 @@ class DataPelaksanaController extends Controller
             InputLaporan::where('kategori', '=', 'honor_panitia_petukang')
                     ->where('status', '=', 'panitia')
                     ->update(['nominal' => $nominal]);
-            return;
+        } else {
+            $data = $this->master->getInputLaporan()
+            ->filter(function ($item) {
+                return $item->kategori === 'honor_panitia_petukang' && $item->status === 'pekerja';
+            });
+            $update = [];
+            foreach ($data as $dt){
+                $mulai = $dt->rentang_tanggal->tanggal_mulai;
+                $selesai = $dt->rentang_tanggal->tanggal_selesai;
+                $mulai = Carbon::parse($mulai);
+                $selesai = Carbon::parse($selesai);
+                $jmlHari = $mulai->diffInDays($selesai) + 1;
+                $nominal = $this->master->getDataPekerja()->sum('honor.nominal');
+                array_push($update, [
+                    'id' => $dt->id,
+                    'nominal' => ($jmlHari * $nominal),
+                ]);
+            }
+
+            // dd($update);
+            foreach ($update as $up) {
+                InputLaporan::where('id', $up['id'])->update(['nominal' => $up['nominal']]);
+            }
         }
-        $data = $this->master->getInputLaporan()
-        ->filter(function ($item) {
-            return $item->kategori === 'honor_panitia_petukang' && $item->status === 'pekerja';
-        });
-        $update = [];
-        foreach ($data as $dt){
-            $mulai = $dt->rentang_tanggal->tanggal_mulai;
-            $selesai = $dt->rentang_tanggal->tanggal_selesai;
-            $mulai = Carbon::parse($mulai);
-            $selesai = Carbon::parse($selesai);
-            $jmlHari = $mulai->diffInDays($selesai) + 1;
-            $nominal = $this->master->getDataPekerja()->sum('honor.nominal');
-            array_push($update, [
-                'no_bukti' => $dt->no_bukti,
-                'nominal' => ($jmlHari * $nominal),
-            ]);
-        }
-        // dd($update);
-        foreach ($update as $up) {
-            InputLaporan::where('no_bukti', $up['no_bukti'])->update(['nominal' => $up['nominal']]);
-        }
-        return;
     }
 }
