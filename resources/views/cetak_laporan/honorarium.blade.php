@@ -38,8 +38,13 @@
         }
 
         table#ttd {
-            width: 100%;
+            width: 90%;
+            margin: 0 auto;
             margin-top: 20px;
+        }
+
+        table#ttd tr td:last-child {
+            width: 250px;
         }
     </style>
 </head>
@@ -73,6 +78,7 @@
                     <th>Nama</th>
                     <th>{{ $status == 'panitia' ? 'Jabatan' : 'Job' }}</th>
                     <th>VOL</th>
+                    <th>Satuan</th>
                     <th>{{ $status == 'panitia' ? 'Honor' : 'Upah' }}</th>
                     <th>Jumlah</th>
                     <th>Tanda Tangan</th>
@@ -98,7 +104,10 @@
                         <td style="width: 230px;">{{ $plk->nama }}</td>
                         <td style="width: 200px;">{{ $plk->honor->jabatan }}</td>
                         <td style="text-align: center;">
-                            {{ ($status == 'panitia' ? '1 Mgg' : ($jmlHari . ' Hari')) }}
+                            {{ ($status == 'panitia' ? '1' : $jmlHari) }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{ ($status == 'panitia' ? 'Minggu' : 'Hari') }}
                         </td>
                         <td style="text-align: right;">
                             {{ number_format($plk->honor->nominal, 0, ',', '.') }}
@@ -113,7 +122,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="5">Total</th>
+                    <th colspan="6">Total</th>
                     <th style="text-align: right;">{{ number_format($total, 0, ',', '.') }}</th>
                     <th></th>
                     <th></th>
@@ -124,26 +133,20 @@
         <table id="ttd">
             <tr>
                 <td>
-                    <span>Mengetahui,</span><br>
+                    <br>
+                    <span>Setuju dibayar,</span><br>
                     <span>Kepala SMK Ashhabul Maimanah Sidayu</span>
                     <br><br><br><br><br>
-                    <b>Zamroni, M.pd.I</b>
-                    <br>
-                    NIP. -
-                </td>
-                <td>
-                    <br>
-                    <span>Ketua P2SP SMK Ashhabul Maimanah Sidayu</span>
-                    <br><br><br><br><br>
-                    <b>Ade Alawi Hasan</b>
+                    <b>Zamroni, M.Pd.I</b>
                     <br>
                     NIP. -
                 </td>
                 <td>
                     Kab. Serang, {{ $format->parse($item->rentang_tanggal->tanggal_selesai)->isoFormat('D MMMM Y') }}<br>
-                    <span>Bendahara P2SP SMK Ashhabul Maimanah Sidayu</span>
+                    <span>Lunas dibayar,</span><br>
+                    <span>Bendahara</span>
                     <br><br><br><br><br>
-                    <b>Yayah Munayah, SE</b>
+                    <b>Yayah Makiyah, S.Pd.I</b>
                     <br>
                     NIP. -
                 </td>
